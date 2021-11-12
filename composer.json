@@ -1,0 +1,72 @@
+{
+    "name": "tatter/preferences",
+    "type": "library",
+    "description": "Persistent user-specific settings for CodeIgniter 4",
+    "keywords": [
+        "codeigniter",
+        "codeigniter4",
+        "preferences",
+        "settings"
+    ],
+    "homepage": "https://github.com/tattersoftware/codeigniter4-preferences",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Matthew Gatner",
+            "email": "mgatner@tattersoftware.com",
+            "homepage": "https://tattersoftware.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.3 || ^8.0",
+        "codeigniter4/authentication-implementation": "^1.0",
+        "codeigniter4/settings": "^1.0"
+    },
+    "require-dev": {
+        "codeigniter4/codeigniter4": "dev-develop",
+        "lonnieezell/codigniter-shield": "dev-develop",
+        "tatter/tools": "^1.15"
+    },
+    "autoload": {
+        "psr-4": {
+            "Tatter\\Preferences\\": "src"
+        },
+        "exclude-from-classmap": [
+            "**/Database/Migrations/**"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\Support\\": "tests/_support"
+        }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/codeigniter4/codeigniter4"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/lonnieezell/codigniter-shield"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "analyze": "phpstan analyze",
+        "ci": [
+            "Composer\\Config::disableProcessTimeout",
+            "@deduplicate",
+            "@analyze",
+            "@test",
+            "@inspect",
+            "@style"
+        ],
+        "deduplicate": "phpcpd app/ src/",
+        "inspect": "deptrac analyze --cache-file=build/deptrac.cache",
+        "mutate": "infection --threads=2 --skip-initial-tests --coverage=build/phpunit",
+        "style": "php-cs-fixer fix --verbose --ansi --using-cache=no",
+        "test": "phpunit"
+    }
+}

@@ -35,7 +35,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          tools: phive, phpunit
+          tools: phpunit
           extensions: intl, json, mbstring, gd, xdebug, xml, sqlite3
           coverage: xdebug
         env:
@@ -67,23 +67,13 @@ jobs:
           TERM: xterm-256color
           TACHYCARDIA_MONITOR_GA: enabled
 
-      - if: matrix.php-versions == '8.0'
-        name: Run Coveralls
-        continue-on-error: true
-        run: |
-          sudo phive --no-progress install --global --trust-gpg-keys E82B2FB314E9906E php-coveralls
-          php-coveralls --verbose --coverage_clover=build/phpunit/clover.xml --json_path build/phpunit/coveralls-upload.json
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COVERALLS_PARALLEL: true
-          COVERALLS_FLAG_NAME: PHP ${{ matrix.php-versions }}
-
   coveralls:
     needs: [main]
     name: Coveralls Finished
     runs-on: ubuntu-latest
     steps:
       - name: Upload Coveralls results
+        continue-on-error: true
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

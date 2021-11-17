@@ -21,11 +21,11 @@
     "require": {
         "php": "^7.3 || ^8.0",
         "codeigniter4/authentication-implementation": "^1.0",
-        "codeigniter4/settings": "^1.0"
+        "codeigniter4/settings": "^2.0"
     },
     "require-dev": {
         "codeigniter4/codeigniter4": "dev-develop",
-        "lonnieezell/codigniter-shield": "dev-develop",
+        "tatter/imposter": "^1.0",
         "tatter/tools": "^1.15"
     },
     "autoload": {
@@ -45,10 +45,6 @@
         {
             "type": "vcs",
             "url": "https://github.com/codeigniter4/codeigniter4"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/lonnieezell/codigniter-shield"
         }
     ],
     "minimum-stability": "dev",

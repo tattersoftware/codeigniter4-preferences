@@ -33,5 +33,7 @@ if (! function_exists('preference')) {
 
         // Setting the contextual value
         return $setting->set($key, $value, $context);
+
+        // Bogus coverage comment
     }
 }

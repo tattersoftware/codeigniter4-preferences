@@ -1,29 +1,25 @@
-# When a PR is opened or a push is made, check code
-# for duplication with PHP Copy/Paste Detector.
 name: PHPCPD
 
 on:
   pull_request:
     branches:
-      - 'develop'
+      - develop
     paths:
-      - 'app/**'
-      - 'src/**'
-      - 'tests/**'
-      - '.github/workflows/deduplicate.yml'
+      - '**.php'
+      - '.github/workflows/phpcpd.yml'
   push:
     branches:
-      - 'develop'
+      - develop
     paths:
-      - 'app/**'
-      - 'src/**'
-      - 'tests/**'
-      - '.github/workflows/deduplicate.yml'
+      - '**.php'
+      - '.github/workflows/phpcpd.yml'
 
 jobs:
   build:
-    name: Duplicate Code Detection
+    name: Code Copy-Paste Detection
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -34,6 +30,7 @@ jobs:
           php-version: '8.0'
           tools: phpcpd
           extensions: dom, mbstring
+          coverage: none
 
-      - name: Detect code duplication
+      - name: Detect duplicate code
         run: phpcpd app/ src/ tests/

@@ -39,10 +39,6 @@ use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Utils\Rector\PassStrictParameterToFunctionParameterRector;
-use Utils\Rector\RemoveErrorSuppressInTryCatchStmtsRector;
-use Utils\Rector\RemoveVarTagFromClassConstantRector;
-use Utils\Rector\UnderscoreToCamelCaseVariableNameRector;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(SetList::DEAD_CODE);
@@ -53,44 +49,27 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
     // paths to refactor; solid alternative to CLI arguments
-    $parameters->set(Option::PATHS, [__DIR__ . '/app', __DIR__ . '/system', __DIR__ . '/tests', __DIR__ . '/utils/Rector']);
+    $parameters->set(Option::PATHS, [__DIR__ . '/src', __DIR__ . '/tests']);
 
     // do you need to include constants, class aliases or custom autoloader? files listed will be executed
     $parameters->set(Option::BOOTSTRAP_FILES, [
-        __DIR__ . '/system/Test/bootstrap.php',
+        realpath(getcwd()) . '/vendor/autoload.php',
+        realpath(getcwd()) . '/vendor/codeigniter4/codeigniter4/system/Test/bootstrap.php',
     ]);
 
     // is there a file you need to skip?
     $parameters->set(Option::SKIP, [
-        __DIR__ . '/app/Views',
-        __DIR__ . '/system/Debug/Toolbar/Views/toolbar.tpl.php',
-        __DIR__ . '/system/ThirdParty',
-        __DIR__ . '/tests/system/Config/fixtures',
-        __DIR__ . '/tests/_support',
+        __DIR__ . '/src/Views',
+
         JsonThrowOnErrorRector::class,
         StringifyStrNeedlesRector::class,
 
         // requires php 8
         RemoveUnusedPromotedPropertyRector::class,
 
-        // private method called via getPrivateMethodInvoker
-        RemoveUnusedPrivateMethodRector::class => [
-            __DIR__ . '/tests/system/Test/ReflectionHelperTest.php',
-        ],
-
         // call on purpose for nothing happen check
         RemoveEmptyMethodCallRector::class => [
             __DIR__ . '/tests',
-        ],
-
-        // check on constant compare
-        UnwrapFutureCompatibleIfPhpVersionRector::class => [
-            __DIR__ . '/system/CodeIgniter.php',
-        ],
-
-        // session handlers have the gc() method with underscored parameter `$max_lifetime`
-        UnderscoreToCamelCaseVariableNameRector::class => [
-            __DIR__ . '/system/Session/Handlers',
         ],
 
         // may cause load view files directly when detecting class that
@@ -106,15 +85,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // use mt_rand instead of random_int on purpose on non-cryptographically random
         RandomFunctionRector::class,
 
-        // $this->assertTrue(isset($bar['foo']))
-        // and $this->assertArrayHasKey('foo', $bar)
-        // or $this->assertObjectHasAttribute('foo', $bar);
-        // are not the same
-        AssertIssetToSpecificMethodRector::class => [
-            __DIR__ . '/tests/system/Entity/EntityTest.php',
-            __DIR__ . '/tests/system/Session/SessionTest.php',
-        ],
-
         // assertContains() to string can't be used in PHPUnit 9.1
         AssertFalseStrposToContainsRector::class,
     ]);
@@ -124,10 +94,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_73);
 
     $services = $containerConfigurator->services();
-    $services->set(UnderscoreToCamelCaseVariableNameRector::class);
     $services->set(SimplifyUselessVariableRector::class);
     $services->set(RemoveAlwaysElseRector::class);
-    $services->set(PassStrictParameterToFunctionParameterRector::class);
     $services->set(CountArrayToEmptyArrayComparisonRector::class);
     $services->set(ForToForeachRector::class);
     $services->set(ChangeNestedForeachIfsToEarlyContinueRector::class);
@@ -142,8 +110,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(UnusedForeachValueToArrayKeysRector::class);
     $services->set(ChangeArrayPushToArrayAssignRector::class);
     $services->set(UnnecessaryTernaryExpressionRector::class);
-    $services->set(RemoveErrorSuppressInTryCatchStmtsRector::class);
-    $services->set(RemoveVarTagFromClassConstantRector::class);
     $services->set(AddPregQuoteDelimiterRector::class);
     $services->set(SimplifyRegexPatternRector::class);
     $services->set(FuncGetArgsToVariadicParamRector::class);

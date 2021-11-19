@@ -32,7 +32,6 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          tools: php-cs-fixer
           extensions: json, tokenizer
           coverage: none
         env:
@@ -59,4 +58,4 @@ jobs:
           fi
 
       - name: Check code for standards compliance
-        run: php-cs-fixer fix --verbose --ansi --dry-run --using-cache=no --diff
+        run: vendor/bin/php-cs-fixer fix --verbose --ansi --dry-run --using-cache=no --diff

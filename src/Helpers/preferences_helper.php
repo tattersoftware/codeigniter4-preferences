@@ -12,26 +12,47 @@ if (! function_exists('preference')) {
      */
     function preference(string $key, $value = null)
     {
-        /** @var \CodeIgniter\Settings\Settings $setting */
-        $setting = service('settings');
+    	// Authenticated
+		if ($userId = user_id()) {
+			$settings = service('settings');
 
-		// Check for an active user
-		if (null === $userId = user_id()) {
-	        // Allow anonymous gets
-    	    if (count(func_get_args()) === 1) {
-        	    return $setting->get($key);
-	        }
+			// Getting
+			if (count(func_get_args()) === 1) {
+				return $settings->get($key, 'user:' . $userId);
+			}
 
-			throw new RuntimeException('You cannot set a preference without an active user.');
+			// Setting
+			if ($value !== null) {
+				$settings->set($key, $value, 'user:' . $userId);
+			}
+
+			// Forgetting (passed null value)
+			else {
+				$settings->forget($key, 'user:' . $userId);
+			}
+
+			return;
 		}
 
-		// Getting the contextual value
-		$context = 'user:' . $userId;
+		// Anonymous
+
+		// Getting
 		if (count(func_get_args()) === 1) {
-			return $setting->get($key, $context);
+			if (session()->has('settings-' . $key)) {
+				return session('settings-' . $key);
+			}
+
+			return service('settings')->get($key);
 		}
 
-        // Setting the contextual value
-        return $setting->set($key, $value, $context);
+		// Setting
+		if ($value !== null) {
+	        session()->set('settings-' . $key, $value);
+
+	        return;
+		}
+
+		// Forgetting (passed null value)
+		session()->remove('settings-' . $key);
     }
 }

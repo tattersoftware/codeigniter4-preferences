@@ -12,47 +12,47 @@ if (! function_exists('preference')) {
      */
     function preference(string $key, $value = null)
     {
-    	// Authenticated
-		if ($userId = user_id()) {
-			$settings = service('settings');
+        // Authenticated
+        if ($userId = user_id()) {
+            $settings = service('settings');
 
-			// Getting
-			if (count(func_get_args()) === 1) {
-				return $settings->get($key, 'user:' . $userId);
-			}
+            // Getting
+            if (count(func_get_args()) === 1) {
+                return $settings->get($key, 'user:' . $userId);
+            }
 
-			// Setting
-			if ($value !== null) {
-				$settings->set($key, $value, 'user:' . $userId);
-			}
+            // Setting
+            if ($value !== null) {
+                $settings->set($key, $value, 'user:' . $userId);
+            }
 
-			// Forgetting (passed null value)
-			else {
-				$settings->forget($key, 'user:' . $userId);
-			}
+            // Forgetting (passed null value)
+            else {
+                $settings->forget($key, 'user:' . $userId);
+            }
 
-			return;
-		}
+            return;
+        }
 
-		// Anonymous
+        // Anonymous
 
-		// Getting
-		if (count(func_get_args()) === 1) {
-			if (session()->has('settings-' . $key)) {
-				return session('settings-' . $key);
-			}
+        // Getting
+        if (count(func_get_args()) === 1) {
+            if (session()->has('settings-' . $key)) {
+                return session('settings-' . $key);
+            }
 
-			return service('settings')->get($key);
-		}
+            return service('settings')->get($key);
+        }
 
-		// Setting
-		if ($value !== null) {
-	        session()->set('settings-' . $key, $value);
+        // Setting
+        if ($value !== null) {
+            session()->set('settings-' . $key, $value);
 
-	        return;
-		}
+            return;
+        }
 
-		// Forgetting (passed null value)
-		session()->remove('settings-' . $key);
+        // Forgetting (passed null value)
+        session()->remove('settings-' . $key);
     }
 }

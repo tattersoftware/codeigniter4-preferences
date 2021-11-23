@@ -42,21 +42,20 @@ as well.
 you may use all the same classes and functions described in its documentation as well. To
 access the user-specific context settings call the `preference()` function anywhere you would
 normally use `setting()`:
-
 ```php
 class Home extends Controller
 {
     public function index()
     {
         return view('welcome', [
-            'theme' => preference('theme'),
+            'icon' => preference('Users.avatar'),
         ];
     }
 
-    public function update_theme()
+    public function update_avatar()
     {
-        if ($theme = $this->request->getPost('theme')) {
-            prefernece('theme', $theme);
+        if ($icon = $this->request->getPost('icon')) {
+            prefernece('Users.avatar', $icon);
         }
 
         return redirect()->back();
@@ -69,6 +68,35 @@ class Home extends Controller
 `preference()` will retrieve and store contextual settings for the current authenticated user.
 If no user is authenticated then it will fall back on the `Session` class with semi-persistent
 settings for as long as the session lasts.
+
+### Placeholder Config
+
+In most cases each setting should have a corresponding Config file. Sometimes these settings
+will not fit under an existing logical grouping, so this library provides a "placeholder"
+Config (`Tatter\Preferences\Config\Preferences`). You may add your own version in **app/* to
+supply default values:
+```php
+<?php
+
+namespace Config;
+
+class Preferences extends \Tatter\Preferences\Config\Preferences
+{
+    /**
+     * Slug for the current user theme.
+     */
+    public string $theme = 'midnight';
+}
+```
+
+Any function calls with the class unspecified will reference the `Preferences` class:
+```php
+// Identical calls:
+$theme = preference('Preferences.theme');
+$theme = preference('theme');
+```
+
+> Hint: Don't forget that libraries and modules can provide Config properties via [Registrars](https://codeigniter.com/user_guide/general/configuration.html#registrars)
 
 ## Troubleshooting
 

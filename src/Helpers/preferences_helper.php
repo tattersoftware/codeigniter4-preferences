@@ -18,7 +18,7 @@ if (! function_exists('preference')) {
         }
 
         // Authenticated
-        if ($userId = user_id()) {
+        if (function_exists('user_id') && $userId = user_id()) {
             $settings = service('settings');
 
             // Getting

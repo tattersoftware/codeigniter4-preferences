@@ -20,7 +20,6 @@
     ],
     "require": {
         "php": "^7.3 || ^8.0",
-        "codeigniter4/authentication-implementation": "^1.0",
         "codeigniter4/settings": "^2.1"
     },
     "require-dev": {
@@ -47,6 +46,9 @@
             "url": "https://github.com/codeigniter4/codeigniter4"
         }
     ],
+    "suggest": {
+        "codeigniter4/authentication-implementation": "Required to enable database persistence."
+    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {

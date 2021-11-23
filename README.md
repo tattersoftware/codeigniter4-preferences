@@ -15,8 +15,8 @@ Persistent user-specific settings for CodeIgniter 4
 ## Description
 
 `Preferences` is a wrapper for [CodeIgniter Settings](https://github.com/codeigniter4/settings)
-to provide authenticated user context to each setting. This allows you to get and set preferences
-on a per-user basis with a single command.
+to provide user context to each setting. This allows you to get and set preferences on a
+per-user basis with a single command.
 
 ## Installation
 
@@ -31,10 +31,10 @@ Once the files are downloaded and included in the autoload, run any library migr
 to ensure the database is set up correctly:
 * `> php spark migrate -all`
 
-`Preferences` requires the Composer provision for `codeigniter4/authentication-implementation` as describe in the
-[CodeIgniter authentication guidelines](https://codeigniter4.github.io/CodeIgniter4/extending/authentication.html),
-so be sure to install a [supported package](https://packagist.org/providers/codeigniter4/authentication-implementation)
-as well.
+`Preferences` suggests the Composer provision for `codeigniter4/authentication-implementation` as describe in the
+[CodeIgniter authentication guidelines](https://codeigniter4.github.io/CodeIgniter4/extending/authentication.html).
+Without this each preference will be limited to the session duration so it is highly recommended
+you install and configure a [supported package](https://packagist.org/providers/codeigniter4/authentication-implementation).
 
 ## Usage
 

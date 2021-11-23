@@ -12,6 +12,11 @@ if (! function_exists('preference')) {
      */
     function preference(string $key, $value = null)
     {
+        // Check for shorthand requests
+        if (count(explode('.', $key)) === 1) {
+            $key = 'Preferences.' . $key;
+        }
+
         // Authenticated
         if ($userId = user_id()) {
             $settings = service('settings');

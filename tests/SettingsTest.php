@@ -31,6 +31,13 @@ final class SettingsTest extends TestCase
         $this->assertSame('Orange', preference('Food.fruit'));
     }
 
+    public function testGetsShorthand()
+    {
+        config('Preferences')->food = 'Ghee';
+
+        $this->assertSame('Ghee', preference('food'));
+    }
+
     public function testForgets()
     {
         preference('Food.fruit', 'Celery');

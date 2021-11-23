@@ -66,6 +66,10 @@ class Home extends Controller
 
 > Note: Be sure to load the helper file (`helper('preferences')`) before using the helper function.
 
+`preference()` will retrieve and store contextual settings for the current authenticated user.
+If no user is authenticated then it will fall back on the `Session` class with semi-persistent
+settings for as long as the session lasts.
+
 ## Troubleshooting
 
 `Preferences` is a very "thin" library conjoining `Settings` and your authentication library

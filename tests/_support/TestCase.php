@@ -20,17 +20,17 @@ abstract class TestCase extends CIUnitTestCase
      */
     protected $table;
 
+    /**
+     * @var Settings
+     */
+    protected $settings;
+
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
         helper(['auth', 'preferences']);
     }
-
-    /**
-     * @var Settings
-     */
-    protected $settings;
 
     /**
      * Sets up the ArrayHandler for faster & easier tests.
